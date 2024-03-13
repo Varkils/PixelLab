@@ -11,7 +11,7 @@ public class Square{
 
     }
 
-    public void draw(Graphics g){
+    public void draw(Graphics g, int x, int y){
         g.setColor(color);
         g.fillRect(x, y, 4, 4);
     }
