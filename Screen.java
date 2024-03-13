@@ -13,7 +13,6 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
 
     private JButton clearButton;
     private Square[][] array;
-    private Square square;
     private Color color = Color.white;
     private int row, col;
 
@@ -100,7 +99,7 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
 
 
     public void mousePressed(MouseEvent e) {
-    if (e.getX() >= 50 && e.getX() <= 550 && e.getY() >= 50 && e.getY() <= 550) {
+    if (e.getX() >= 50 && e.getX() < 550 && e.getY() >= 50 && e.getY() < 550) {
         int clickedRow = (e.getY() - 50) / 5;
         int clickedCol = (e.getX() - 50) / 5;
 
@@ -165,7 +164,7 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
 
 
     public void mouseDragged(MouseEvent e) {
-        if (e.getX() >= 50 && e.getX() <= 550 && e.getY() >= 50 && e.getY() <= 550) {
+        if (e.getX() >= 50 && e.getX() < 550 && e.getY() >= 50 && e.getY() < 550) {
             int clickedRow = (e.getY() - 50) / 5;
             int clickedCol = (e.getX() - 50) / 5;
     
