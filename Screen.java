@@ -8,20 +8,35 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Screen extends JPanel implements MouseListener, MouseMotionListener, ActionListener{
 
     private JButton clearButton;
     private Square[][] array;
+    private Color[][] colors;
+    private Color[] colorsArray;
     private Color color = Color.white;
     private int row, col;
+    private BufferedImage background;
 
     public Screen(){
         setLayout(null);
         setFocusable(true);
+        //Image by <a href="https://pixabay.com/users/8926-8926/?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=1909992">8926</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=image&utm_content=1909992">Pixabay</a>
         
+        try {
+            background = ImageIO.read(new File("background.jpg"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         array = new Square[100][100];
+        colors = new Color[6][6];
 
         for(int row=0;row<array.length;row++){
             for(int col=0;col<array[row].length;col++){
@@ -31,7 +46,7 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
 
         clearButton = new JButton("Clear");
         clearButton.addActionListener(this);
-        clearButton.setBounds(640,100,100,40);
+        clearButton.setBounds(600,100,150,50);
         add(clearButton);
 
         addMouseListener(this);
@@ -47,52 +62,77 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
 
     public void paintComponent(Graphics g){
         super.paintComponent(g);
+        g.drawImage(background, 0, 0, null);
+
+
+
+        for(int row=0;row<array.length;row++){
+            for(int col=0;col<array[row].length;col++){
+                array[row][col].drawCanvas(g, 50+col*5, 50+row*5);
+            }
+        }
+
+        g.setColor(Color.black);
         for(int i = 0; i<101; i++){
             g.drawLine(50, 50 + i*5, 550, 50 + i*5);
             g.drawLine(50  + i*5, 50, 50 + i*5, 550);
 
         }
 
-        for(int i = 0; i<4; i++){
-            g.drawLine(600, 250 + i*50, 750, 250 + i*50);
-            g.drawLine(600 + i*50, 250, 600 + i*50, 400);
+        for(int i = 0; i<7; i++){
+            g.drawLine(600, 250 + i*25, 750, 250 + i*25);
+            g.drawLine(600 + i*25, 250, 600 + i*25, 400);
         }
 
-        for(int row=0;row<array.length;row++){
-            for(int col=0;col<array[row].length;col++){
-                array[row][col].draw(g, 50+col*5, 50+row*5);
+
+
+        array[row][col].drawCanvas(g, 50+col*5, 50+row*5);
+        
+        drawColors(g);
+        
+    }
+
+    public void drawColors(Graphics g){
+        makeColors();
+        for(int row = 0; row<colors.length; row++){
+            for(int col = 0; col<colors[row].length; col++){
+                g.setColor(colors[row][col]);
+                g.fillRect(600 + col*25, 250 + row*25, 25, 25);
             }
         }
-
-
-        array[row][col].draw(g, 50+col*5, 50+row*5);
+    }
+    public void makeColors(){
+        colorsArray = new Color[36];
+        for(int i = 0; i<6;i++){
+            colorsArray[i] = new Color(255,i*51,0);
+        }
+        for(int i = 0; i<6;i++){
+            colorsArray[i+6] = new Color(255 - i*51,255,0);
+        }
+        for(int i = 0; i<6;i++){
+            colorsArray[i+12] = new Color(0,255,i*51);
+        }
+        for(int i = 0; i<6;i++){
+            colorsArray[i+18] = new Color(0,255 - i*51,255);
+        }
+        for(int i = 0; i<6;i++){
+            colorsArray[i+24] = new Color(i*51,0,255);
+        }
+        for(int i = 0; i<4;i++){
+            colorsArray[i+30] = new Color(255,0,255 - i*51);
+        }
+        colorsArray[34] = Color.black;
+        colorsArray[35] = Color.white;
         
-        g.setColor(Color.red);
-        g.fillRect(601,251,49,49);
 
-        g.setColor(Color.orange);
-        g.fillRect(651,251,49,49);
 
-        g.setColor(Color.yellow);
-        g.fillRect(701,251,49,49);
 
-        g.setColor(Color.green);
-        g.fillRect(601,301,49,49);
-
-        g.setColor(Color.blue);
-        g.fillRect(651,301,49,49);
-
-        g.setColor(new Color(0,128,255));
-        g.fillRect(701,301,49,49);
-
-        g.setColor(new Color(255,51,153));
-        g.fillRect(601,351,49,49);
-
-        g.setColor(Color.black);;
-        g.fillRect(651,351,49,49);
-
-        g.setColor(Color.white);;
-        g.fillRect(701,351,49,49);
+        int index = 0;
+        for (int row = 0; row < colors.length; row++) {
+            for (int col = 0; col < colors[row].length; col++) {
+                colors[row][col] = colorsArray[index++];
+            }
+        }
         
     }
 
@@ -100,35 +140,16 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
 
     public void mousePressed(MouseEvent e) {
     if (e.getX() >= 50 && e.getX() < 550 && e.getY() >= 50 && e.getY() < 550) {
-        int clickedRow = (e.getY() - 50) / 5;
-        int clickedCol = (e.getX() - 50) / 5;
+        int clickedRowCanvas = (e.getY() - 50) / 5;
+        int clickedColCanvas = (e.getX() - 50) / 5;
 
-        // Check if the clicked coordinates are within the array bounds
-        
-            // Update the color of the clicked cell
-            array[clickedRow][clickedCol].setColor(color);
+            array[clickedRowCanvas][clickedColCanvas].setColor(color);
             repaint();
     } else if (e.getX() >= 600 && e.getX() <= 750 && e.getY() >= 250 && e.getY() <= 400) {
-        // Update color based on the color palette
-        if (e.getX() >= 600 && e.getX() <= 650 && e.getY() >= 250 && e.getY() <= 300) {
-            color = Color.red;
-        } else if (e.getX() >= 650 && e.getX() <= 700 && e.getY() >= 250 && e.getY() <= 300) {
-            color = Color.orange;
-        } else if (e.getX() >= 700 && e.getX() <= 750 && e.getY() >= 250 && e.getY() <= 300) {
-            color = Color.yellow;
-        } else if (e.getX() >= 600 && e.getX() <= 650 && e.getY() >= 300 && e.getY() <= 350) {
-            color = Color.green;
-        } else if (e.getX() >= 650 && e.getX() <= 700 && e.getY() >= 300 && e.getY() <= 350) {
-            color = Color.blue;
-        } else if (e.getX() >= 700 && e.getX() <= 750 && e.getY() >= 300 && e.getY() <= 350) {
-            color = new Color(0, 128, 255);
-        } else if (e.getX() >= 600 && e.getX() <= 650 && e.getY() >= 350 && e.getY() <= 400) {
-            color = new Color(255, 51, 153);
-        } else if (e.getX() >= 650 && e.getX() <= 700 && e.getY() >= 350 && e.getY() <= 400) {
-            color = Color.black;
-        } else if (e.getX() >= 700 && e.getX() <= 750 && e.getY() >= 350 && e.getY() <= 400) {
-            color = Color.white;
-        }
+        int clickedRowColors = (e.getY() - 250) / 25;
+        int clickedColColors = (e.getX() - 600) / 25;
+
+        color = colors[clickedRowColors][clickedColColors];
         System.out.println(color);
         repaint();
     }
@@ -161,6 +182,7 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
             clear();
         }
     }
+
 
 
     public void mouseDragged(MouseEvent e) {

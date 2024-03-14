@@ -11,10 +11,11 @@ public class Square{
 
     }
 
-    public void draw(Graphics g, int x, int y){
+    public void drawCanvas(Graphics g, int x, int y){
         g.setColor(color);
-        g.fillRect(x, y, 4, 4);
+        g.fillRect(x, y, 5, 5);
     }
+
 
     public void setColor(Color color){
         this.color = color;
