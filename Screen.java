@@ -47,7 +47,7 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
         array = new Square[100][100];
         colors = new Color[6][6];
 
-        //nested for loop to fill the canvas with squares
+        //for loops to fill the canvas with squares
         for(int row=0;row<array.length;row++){
             for(int col=0;col<array[row].length;col++){
                 array[row][col] = new Square(color);
@@ -75,7 +75,7 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
         //draws the background image
         g.drawImage(background, 0, 0, null);
 
-        //nested for loop to draw the canvas when someone clicks
+        //for loops to draw the canvas when someone clicks
         for(int row=0;row<array.length;row++){
             for(int col=0;col<array[row].length;col++){
                 array[row][col].drawCanvas(g, 50+col*5, 50+row*5);
@@ -150,6 +150,7 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
     //method that determines what to do if the mouse is pressed
     public void mousePressed(MouseEvent e) {
         //if the mouse is within the canvas, then it does the math to determine which mixel was clicked. then it sets the color of the pixel
+        //the outer bound has to be < instead of <= otherwise it can go out of bounds for the array
     if (e.getX() >= 50 && e.getX() < 550 && e.getY() >= 50 && e.getY() < 550) {
         int clickedRowCanvas = (e.getY() - 50) / 5;
         int clickedColCanvas = (e.getX() - 50) / 5;
@@ -178,6 +179,7 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
     public void mouseClicked(MouseEvent e) {}
 
     //same code as in mouse pressed for setting the color but this method allows for you to drag the mouse instead of click each square
+    //the outer bound has to be < instead of <= otherwise it can go out of bounds for the array
     public void mouseDragged(MouseEvent e) {
         if (e.getX() >= 50 && e.getX() < 550 && e.getY() >= 50 && e.getY() < 550) {
             int clickedRow = (e.getY() - 50) / 5;
