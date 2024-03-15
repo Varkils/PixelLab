@@ -116,22 +116,27 @@ public class Screen extends JPanel implements MouseListener, MouseMotionListener
         for(int i = 0; i<6;i++){
             colorsArray[i] = new Color(255,i*51,0);
         }
-        for(int i = 0; i<6;i++){
-            colorsArray[i+6] = new Color(255 - i*51,255,0);
+        for(int i = 1; i<6;i++){
+            colorsArray[i+5] = new Color(255 - i*51,255,0);
         }
-        for(int i = 0; i<6;i++){
-            colorsArray[i+12] = new Color(0,255,i*51);
+        for(int i = 1; i<6;i++){
+            colorsArray[i+10] = new Color(0,255,i*51);
         }
-        for(int i = 0; i<6;i++){
-            colorsArray[i+18] = new Color(0,255 - i*51,255);
+        for(int i = 1; i<6;i++){
+            colorsArray[i+15] = new Color(0,255 - i*51,255);
         }
-        for(int i = 0; i<6;i++){
-            colorsArray[i+24] = new Color(i*51,0,255);
+        for(int i = 1; i<6;i++){
+            colorsArray[i+20] = new Color(i*51,0,255);
         }
-        for(int i = 0; i<4;i++){
-            colorsArray[i+30] = new Color(255,0,255 - i*51);
+        for(int i = 0; i<5;i++){
+            colorsArray[i+25] = new Color(255,0,255 - i*51);
         }
-        colorsArray[34] = Color.black;
+        //gray scale for more shades at the botttom
+        colorsArray[30] = Color.black;
+        colorsArray[31] = new Color(51,51,51);
+        colorsArray[32] = new  Color(102,102,102);
+        colorsArray[33] = new  Color(153,153,153);
+        colorsArray[34] = new  Color(204,204,204);
         colorsArray[35] = Color.white;
         
 
